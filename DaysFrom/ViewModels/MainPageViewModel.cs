@@ -76,7 +76,7 @@ namespace DaysFrom.ViewModels
             {
                 IsCancellable = true,
                 MinimumDate = DateTime.Now.AddYears(-100),
-                MaximumDate = DateTime.Now.AddYears(100)
+                MaximumDate = DateTime.Now.AddYears(100),
             });
             if (!result.Ok)
             {

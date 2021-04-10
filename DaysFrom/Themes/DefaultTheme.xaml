@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DaysFrom.Themes.DefaultTheme">
+    <Color x:Key="BackgroundColor">WhiteSmoke</Color>
+    <Color x:Key="FrameBorderColor">LightGray</Color>
+    <Color x:Key="TextPrimaryColor">White</Color>
+    <Color x:Key="TextSecondaryColor">WhiteSmoke</Color>
+    <Color x:Key="AltButtonBGColor1">LightSeaGreen</Color>
+    <Color x:Key="AltButtonBGColor2">DarkSeaGreen</Color>
+    <Color x:Key="AltButtonTextColor">White</Color>
+    <Color x:Key="DeleteButtonBGColor1">FireBrick</Color>
+    <Color x:Key="DeleteButtonBGColor2">Red</Color>
+    <Color x:Key="DeleteButtonTextColor">White</Color>
+    <Color x:Key="ItemBGColor1">SlateBlue</Color>
+    <Color x:Key="ItemBGColor2">CornflowerBlue</Color>
+
+    <Color x:Key="DarkBackgroundColor">#121217</Color>
+    <Color x:Key="DarkFrameBorderColor">#262730</Color>
+    <Color x:Key="DarkTextPrimaryColor">White</Color>
+    <Color x:Key="DarkTextSecondaryColor">WhiteSmoke</Color>
+    <Color x:Key="DarkAltButtonBGColor1">#486E99</Color>
+    <Color x:Key="DarkAltButtonBGColor2">#34506F</Color>
+    <Color x:Key="DarkAltButtonTextColor">#848C8E</Color>
+    <Color x:Key="DarkDeleteButtonBGColor1">FireBrick</Color>
+    <Color x:Key="DarkDeleteButtonBGColor2">Red</Color>
+    <Color x:Key="DarkDeleteButtonTextColor">White</Color>
+    <Color x:Key="DarkItemBGColor1">#24252E</Color>
+    <Color x:Key="DarkItemBGColor2">#24252E</Color>
+
+    <Style x:Key="ContentPageStyle" TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackgroundColor}, Dark={StaticResource DarkBackgroundColor}}"/>
+    </Style>
+    <Style x:Key="ItemFrameStyle" TargetType="Frame">
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource FrameBorderColor}, Dark={StaticResource DarkFrameBorderColor}}"/>
+        <Setter Property="HasShadow" Value="True"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,0">
+                    <GradientStop Color="{AppThemeBinding Light={StaticResource ItemBGColor1}, Dark={StaticResource DarkItemBGColor1}}"
+                                  Offset="0.1" />
+                    <GradientStop Color="{AppThemeBinding Light={StaticResource ItemBGColor2}, Dark={StaticResource DarkItemBGColor2}}"
+                                  Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ItemNameLabelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="Large"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+    </Style>
+    <Style x:Key="ItemDescriptionLabelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="Small"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+    </Style>
+    <Style x:Key="EventDateLabelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="Body"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+        <Setter Property="HorizontalTextAlignment" Value="End"/>
+    </Style>
+
+    <Style x:Key="AddEventButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ItemBGColor1}, Dark={StaticResource DarkItemBGColor1}}"/>
+        <Setter Property="Text" Value="+"/>
+        <Setter Property="CornerRadius" Value="15"/>
+        <Setter Property="WidthRequest" Value="50"/>
+        <Setter Property="Margin" Value="0,0,10,10"/>
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource FrameBorderColor}, Dark={StaticResource DarkFrameBorderColor}}"/>
+        <Setter Property="BorderWidth" Value="0.5"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="FontSize" Value="Large"/>
+        <Setter Property="HorizontalOptions" Value="End"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+    </Style>
+
+    <Style x:Key="DelSwipeItemFrame" TargetType="Frame">
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource FrameBorderColor}, Dark={StaticResource DarkFrameBorderColor}}"/>
+        <Setter Property="HasShadow" Value="True"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,0">
+                    <GradientStop Color="{AppThemeBinding Light={StaticResource DeleteButtonBGColor1}, Dark={StaticResource DarkDeleteButtonBGColor1}}"
+                                      Offset="0.1" />
+                    <GradientStop Color="{AppThemeBinding Light={StaticResource DeleteButtonBGColor2}, Dark={StaticResource DarkDeleteButtonBGColor2}}"
+                                      Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="AltSwipeItemFrame" TargetType="Frame">
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource FrameBorderColor}, Dark={StaticResource DarkFrameBorderColor}}"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,0">
+                    <GradientStop Color="{AppThemeBinding Light={StaticResource AltButtonBGColor1}, Dark={StaticResource DarkAltButtonBGColor1}}"
+                                      Offset="0.1" />
+                    <GradientStop Color="{AppThemeBinding Light={StaticResource AltButtonBGColor2}, Dark={StaticResource DarkAltButtonBGColor2}}"
+                                      Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="DatePicker">
+        <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackgroundColor}, Dark={StaticResource DarkBackgroundColor}}"/>-->
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackgroundColor}, Dark={StaticResource DarkBackgroundColor}}"/>
+    </Style>
+
+</ResourceDictionary>

@@ -10,8 +10,8 @@
              mc:Ignorable="d"
              x:Class="DaysFrom.Views.MainPage"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="WhiteSmoke"
-             Appearing="ContentPage_Appearing">
+             Appearing="ContentPage_Appearing"
+             Style="{StaticResource ContentPageStyle}">
     <ContentPage.BindingContext>
         <vms:MainPageViewModel />
     </ContentPage.BindingContext>
@@ -37,17 +37,7 @@
                                             <StackLayout VerticalOptions="Center"
                                                          Padding="10"
                                                          HorizontalOptions="CenterAndExpand">
-                                                <Frame BorderColor="LightGray"
-                                                       HasShadow="True">
-                                                    <Frame.Background>
-                                                        <LinearGradientBrush StartPoint="0,0"
-                                                                             EndPoint="1,0">
-                                                            <GradientStop Color="Firebrick"
-                                                                          Offset="0.1" />
-                                                            <GradientStop Color="Red"
-                                                                          Offset="1.0" />
-                                                        </LinearGradientBrush>
-                                                    </Frame.Background>
+                                                <Frame Style="{StaticResource DelSwipeItemFrame}">
                                                     <Label Text="Delete"
                                                            TextColor="White" />
                                                 </Frame>
@@ -58,17 +48,7 @@
                                             <StackLayout VerticalOptions="Center"
                                                          Padding="10"
                                                          HorizontalOptions="CenterAndExpand">
-                                                <Frame BorderColor="LightGray"
-                                                       HasShadow="True">
-                                                    <Frame.Background>
-                                                        <LinearGradientBrush StartPoint="0,0"
-                                                                             EndPoint="1,0">
-                                                            <GradientStop Color="LightSeaGreen"
-                                                                          Offset="0.1" />
-                                                            <GradientStop Color="DarkSeaGreen"
-                                                                          Offset="1.0" />
-                                                        </LinearGradientBrush>
-                                                    </Frame.Background>
+                                                <Frame Style="{StaticResource AltSwipeItemFrame}">
                                                     <Label Text="Edit"
                                                            TextColor="White" />
                                                 </Frame>
@@ -77,28 +57,14 @@
                                     </SwipeItems>
                                 </SwipeView.RightItems>
                                 <StackLayout Padding="10">
-                                    <Frame BorderColor="LightGray"
-                                           HasShadow="True">
-                                        <Frame.Background>
-                                            <LinearGradientBrush StartPoint="0,0"
-                                                                 EndPoint="1,0">
-                                                <GradientStop Color="SlateBlue"
-                                                              Offset="0.1" />
-                                                <GradientStop Color="CornflowerBlue"
-                                                              Offset="1.0" />
-                                            </LinearGradientBrush>
-                                        </Frame.Background>
+                                    <Frame Style="{StaticResource ItemFrameStyle}">
                                         <StackLayout x:DataType="model:Event">
-                                            <Label Text="{Binding Name}"
-                                                   FontSize="Large"
-                                                   TextColor="White" />
-                                            <Label Text="{Binding Description}"
-                                                   FontSize="Small"
-                                                   TextColor="WhiteSmoke" />
-                                            <Label Text="{Binding EventDate, Converter={StaticResource DaysSinceConverter}}"
-                                                   FontSize="Body"
-                                                   TextColor="White"
-                                                   HorizontalTextAlignment="End" />
+                                            <Label Style="{StaticResource ItemNameLabelStyle}" 
+                                                   Text="{Binding Name}"/>
+                                            <Label Style="{StaticResource ItemDescriptionLabelStyle}" 
+                                                   Text="{Binding Description}"/>
+                                            <Label Style="{StaticResource EventDateLabelStyle}" 
+                                                   Text="{Binding EventDate, Converter={StaticResource DaysSinceConverter}}"/>
                                         </StackLayout>
                                     </Frame>
                                 </StackLayout>
@@ -107,17 +73,8 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
-            <Button Text="+"
-                    HorizontalOptions="End"
-                    CornerRadius="15"
-                    WidthRequest="50"
-                    Margin="0,0,10,10"
-                    BorderColor="Gray"
-                    BorderWidth="0.5"
-                    BackgroundColor="DodgerBlue"
-                    FontAttributes="Bold"
-                    FontSize="Large"
-                    Command="{Binding AddEventCommand}" />
+            <Button Style="{StaticResource AddEventButtonStyle}"
+                    Command="{Binding AddEventCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

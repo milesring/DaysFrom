@@ -1,6 +1,7 @@
 ﻿using DaysFrom.Services;
 using DaysFrom.Views;
 using System;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,6 +15,7 @@ namespace DaysFrom
             InitializeComponent();
 
             //DependencyService.Register<MockDataStore>();
+            Current.UserAppTheme = Application.Current.RequestedTheme;
             MainPage = new AppShell();
         }
 
