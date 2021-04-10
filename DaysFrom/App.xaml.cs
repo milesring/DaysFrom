@@ -13,7 +13,7 @@ namespace DaysFrom
         public App()
         {
             InitializeComponent();
-
+            DependencyService.Register<INotificationManager>();
             //DependencyService.Register<MockDataStore>();
             Current.UserAppTheme = Application.Current.RequestedTheme;
             MainPage = new AppShell();

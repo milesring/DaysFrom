@@ -11,8 +11,10 @@ namespace DaysFrom.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
+        INotificationManager notificationManager;
         public MainPageViewModel()
         {
+            notificationManager = DependencyService.Get<INotificationManager>();
             Events = new ObservableRangeCollection<Event>();
             RefreshCommand = new AsyncCommand(Refresh);
             AddEventCommand = new AsyncCommand(AddEvent);
@@ -84,6 +86,7 @@ namespace DaysFrom.ViewModels
             }
             var selectedDate = result.SelectedDate;
             await EventDataService.AddEvent(new Event() { Name = name, Description = description, EventDate = result.SelectedDate });
+            notificationManager.SendNotification("DaysFrom", $"Event {name} added!");
             await Refresh();
         }
 
