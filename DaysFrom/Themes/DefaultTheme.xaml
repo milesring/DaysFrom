@@ -56,8 +56,8 @@
     </Style>
     <Style x:Key="EventDateLabelStyle" TargetType="Label">
         <Setter Property="FontSize" Value="Body"/>
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
-        <Setter Property="HorizontalTextAlignment" Value="End"/>
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource TextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}" />
     </Style>
 
     <Style x:Key="AddEventButtonStyle" TargetType="Button">

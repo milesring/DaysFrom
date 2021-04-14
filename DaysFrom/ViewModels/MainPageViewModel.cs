@@ -12,9 +12,12 @@ namespace DaysFrom.ViewModels
     public class MainPageViewModel : BaseViewModel
     {
         INotificationManager notificationManager;
+        
         public MainPageViewModel()
         {
             notificationManager = DependencyService.Get<INotificationManager>();
+
+            //TODO: Grouping by Future/Past/Favorite?
             Events = new ObservableRangeCollection<Event>();
             RefreshCommand = new AsyncCommand(Refresh);
             AddEventCommand = new AsyncCommand(AddEvent);
@@ -74,18 +77,34 @@ namespace DaysFrom.ViewModels
                 return;
             }
 
-            var result = await UserDialogs.Instance.DatePromptAsync(new DatePromptConfig
+            var dateResult = await UserDialogs.Instance.DatePromptAsync(new DatePromptConfig
             {
                 IsCancellable = true,
                 MinimumDate = DateTime.Now.AddYears(-100),
                 MaximumDate = DateTime.Now.AddYears(100),
             });
-            if (!result.Ok)
+            if (!dateResult.Ok)
             {
                 return;
             }
-            var selectedDate = result.SelectedDate;
-            await EventDataService.AddEvent(new Event() { Name = name, Description = description, EventDate = result.SelectedDate });
+            var selectedDate = dateResult.SelectedDate;
+
+            bool timeRequest = await Application.Current.MainPage.DisplayAlert("Specify Time", "Would you like to specify a time?", "Yes", "No");
+            if (timeRequest)
+            {
+                var timeResult = await UserDialogs.Instance.TimePromptAsync(new TimePromptConfig
+                {
+                    IsCancellable = true
+                });
+                if (!timeResult.Ok)
+                {
+                    return;
+                }
+                selectedDate = selectedDate.Add(timeResult.SelectedTime);
+            }
+            
+
+            await EventDataService.AddEvent(new Event() { Name = name, Description = description, EventDate = selectedDate });
             notificationManager.SendNotification("DaysFrom", $"Event {name} added!");
             await Refresh();
         }
@@ -122,6 +141,22 @@ namespace DaysFrom.ViewModels
             }
             var selectedDate = result.SelectedDate;
 
+            bool timeRequest = await Application.Current.MainPage.DisplayAlert("Specify Time", "Would you like to specify a time?", "Yes", "No");
+            if (timeRequest)
+            {
+                var timeResult = await UserDialogs.Instance.TimePromptAsync(new TimePromptConfig
+                {
+                    IsCancellable = true,
+                    SelectedTime = eventModel.EventDate.TimeOfDay
+                });
+                if (!timeResult.Ok)
+                {
+                    return;
+                }
+
+                selectedDate = selectedDate.Add(timeResult.SelectedTime);
+            }
+
             if (!name.Equals(eventModel.Name))
             {
                 eventModel.Name = name;
@@ -134,7 +169,7 @@ namespace DaysFrom.ViewModels
 
             if(result.SelectedDate != eventModel.EventDate)
             {
-                eventModel.EventDate = result.SelectedDate;
+                eventModel.EventDate = selectedDate;
             }
             await EventDataService.AddEvent(eventModel);
             await Refresh();

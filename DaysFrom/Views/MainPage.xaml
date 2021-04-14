@@ -58,14 +58,31 @@
                                 </SwipeView.RightItems>
                                 <StackLayout Padding="10">
                                     <Frame Style="{StaticResource ItemFrameStyle}">
-                                        <StackLayout x:DataType="model:Event">
-                                            <Label Style="{StaticResource ItemNameLabelStyle}" 
-                                                   Text="{Binding Name}"/>
-                                            <Label Style="{StaticResource ItemDescriptionLabelStyle}" 
-                                                   Text="{Binding Description}"/>
-                                            <Label Style="{StaticResource EventDateLabelStyle}" 
-                                                   Text="{Binding EventDate, Converter={StaticResource DaysSinceConverter}}"/>
-                                        </StackLayout>
+                                        <Grid ColumnDefinitions="*,*"
+                                              RowDefinitions="*,*,*"
+                                              x:DataType="model:Event">
+                                            <!-- TODO: Max length to avoid linebreaking -->
+                                            <Label Style="{StaticResource ItemNameLabelStyle}"
+                                                   Text="{Binding Name}"
+                                                   Grid.Column="0"
+                                                   Grid.Row="0"/>
+                                            <Label Style="{StaticResource ItemDescriptionLabelStyle}"
+                                                   Text="{Binding Description}"
+                                                   Grid.Column="0"
+                                                   Grid.Row="1"/>
+                                            <Label Style="{StaticResource EventDateLabelStyle}"
+                                                   Text="{Binding EventDate, StringFormat='{0:MM/dd/yy}'}"
+                                                   Grid.Column="1"
+                                                   Grid.Row="0"
+                                                   HorizontalOptions="End"/>
+                                            <Label Style="{StaticResource EventDateLabelStyle}"
+                                                   Text="{Binding EventDate, Converter={StaticResource DaysSinceConverter}}"
+                                                   Grid.Column="0"
+                                                   Grid.Row="2"
+                                                   Grid.ColumnSpan="2"
+                                                   HorizontalOptions="EndAndExpand"
+                                                   HorizontalTextAlignment="End"/>
+                                        </Grid>
                                     </Frame>
                                 </StackLayout>
                             </SwipeView>
@@ -74,7 +91,7 @@
                 </CollectionView>
             </RefreshView>
             <Button Style="{StaticResource AddEventButtonStyle}"
-                    Command="{Binding AddEventCommand}"/>
+                    Command="{Binding AddEventCommand}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
