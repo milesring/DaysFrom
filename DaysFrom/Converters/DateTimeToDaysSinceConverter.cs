@@ -17,7 +17,7 @@ namespace DaysFrom.Converters
             var min = timeSince.Minutes;
 
             string tense = "have passed.";
-            if(days < 0)
+            if(timeSince.TotalSeconds < 0)
             {
                 days *= -1;
                 hours *= -1;

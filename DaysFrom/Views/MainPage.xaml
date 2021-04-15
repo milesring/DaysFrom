@@ -18,15 +18,27 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:DateTimeToDaysSinceConverter x:Key="DaysSinceConverter" />
+            <converters:BoolToFavoriteButtonTextConverter x:Key="BoolToFavoriteConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <RefreshView Command="{Binding RefreshCommand}"
                          IsRefreshing="{Binding IsBusy, Mode=OneWay}">
-                <CollectionView ItemsSource="{Binding Events}"
+                <CollectionView ItemsSource="{Binding EventGroups}"
+                                IsGrouped="True"
                                 Margin="0,0,0,-75"
                                 SelectedItem="{Binding SelectedEvent}">
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding Name}"
+                                   FontSize="Medium"
+                                   />
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+                    
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <SwipeView>
@@ -39,6 +51,17 @@
                                                          HorizontalOptions="CenterAndExpand">
                                                 <Frame Style="{StaticResource DelSwipeItemFrame}">
                                                     <Label Text="Delete"
+                                                           TextColor="White" />
+                                                </Frame>
+                                            </StackLayout>
+                                        </SwipeItemView>
+                                        <SwipeItemView Command="{Binding Source={RelativeSource AncestorType={x:Type vms:MainPageViewModel}}, Path=FavoriteEventCommand}"
+                                                       CommandParameter="{Binding .}">
+                                            <StackLayout VerticalOptions="Center"
+                                                         Padding="10"
+                                                         HorizontalOptions="CenterAndExpand">
+                                                <Frame Style="{StaticResource AltSwipeItemFrame}">
+                                                    <Label Text="Favorite"
                                                            TextColor="White" />
                                                 </Frame>
                                             </StackLayout>

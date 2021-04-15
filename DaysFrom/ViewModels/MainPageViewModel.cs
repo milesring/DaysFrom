@@ -4,6 +4,8 @@ using DaysFrom.Services;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -19,10 +21,12 @@ namespace DaysFrom.ViewModels
 
             //TODO: Grouping by Future/Past/Favorite?
             Events = new ObservableRangeCollection<Event>();
+            EventGroups = new ObservableCollection<EventGroup>();
             RefreshCommand = new AsyncCommand(Refresh);
             AddEventCommand = new AsyncCommand(AddEvent);
             RemoveEventCommand = new AsyncCommand<Event>(RemoveEvent);
             EditEventCommand = new AsyncCommand<Event>(EditEvent);
+            FavoriteEventCommand = new AsyncCommand<Event>(FavoriteEvent);
         }
 
         #region PropertyBackers
@@ -31,6 +35,10 @@ namespace DaysFrom.ViewModels
 
         #region Properties
         public ObservableRangeCollection<Event> Events
+        {
+            get;
+        }
+        public ObservableCollection<EventGroup> EventGroups
         {
             get;
         }
@@ -48,6 +56,8 @@ namespace DaysFrom.ViewModels
         public AsyncCommand<Event> RemoveEventCommand { get; }
         public AsyncCommand<Event> EditEventCommand { get; }
 
+        public AsyncCommand<Event> FavoriteEventCommand { get; }
+
         #endregion
 
         #region CommandActions
@@ -59,10 +69,47 @@ namespace DaysFrom.ViewModels
             }
             IsBusy = true;
             Events.Clear();
+            EventGroups.Clear();
             var events = await EventDataService.GetEvent();
+            var futureList = new List<Event>();
+            var pastList = new List<Event>();
+            var favoriteList = new List<Event>();
+            foreach (var eventItem in events)
+            {
+                if (eventItem.Favorite)
+                {
+                    favoriteList.Add(eventItem);
+                }
+                else if(eventItem.EventDate <= DateTime.Now)
+                {
+                    pastList.Add(eventItem);
+                }
+                else
+                {
+                    futureList.Add(eventItem);
+                }
+            }
+            var groups = new EventGroup[] { 
+                new EventGroup("Favorite Events", favoriteList), 
+                new EventGroup("Future Events", futureList), 
+                new EventGroup("Past Events", pastList) 
+            };
+
+
+            //this avoids empty headers
+            for (int i = 0; i < groups.Length; i++)
+            {
+                if(groups[i].Count > 0)
+                {
+                    EventGroups.Add(groups[i]);
+                }
+            }
+
             Events.AddRange(events);
             IsBusy = false;
         }
+
+
 
         async Task AddEvent()
         {
@@ -171,6 +218,13 @@ namespace DaysFrom.ViewModels
             {
                 eventModel.EventDate = selectedDate;
             }
+            await EventDataService.AddEvent(eventModel);
+            await Refresh();
+        }
+
+        async Task FavoriteEvent(Event eventModel)
+        {
+            eventModel.Favorite = !eventModel.Favorite;
             await EventDataService.AddEvent(eventModel);
             await Refresh();
         }
