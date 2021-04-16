@@ -17,9 +17,10 @@ namespace DaysFrom.ViewModels
         
         public MainPageViewModel()
         {
+
+
             notificationManager = DependencyService.Get<INotificationManager>();
 
-            //TODO: Grouping by Future/Past/Favorite?
             Events = new ObservableRangeCollection<Event>();
             EventGroups = new ObservableCollection<EventGroup>();
             RefreshCommand = new AsyncCommand(Refresh);
@@ -70,7 +71,7 @@ namespace DaysFrom.ViewModels
             IsBusy = true;
             Events.Clear();
             EventGroups.Clear();
-            var events = await EventDataService.GetEvent();
+            var events = await EventDataService.GetEvents();
             var futureList = new List<Event>();
             var pastList = new List<Event>();
             var favoriteList = new List<Event>();
@@ -109,10 +110,9 @@ namespace DaysFrom.ViewModels
             IsBusy = false;
         }
 
-
-
         async Task AddEvent()
         {
+            //TODO: Remove acrPopups and use XTC implementation
             string name = await Application.Current.MainPage.DisplayPromptAsync("Event Name", "Name of event");
             if (string.IsNullOrEmpty(name))
             {
@@ -151,7 +151,7 @@ namespace DaysFrom.ViewModels
             }
             
 
-            await EventDataService.AddEvent(new Event() { Name = name, Description = description, EventDate = selectedDate });
+            await EventDataService.AddEvent(new Event() { Name = name, Description = description, EventDate = selectedDate, EventCreation = DateTime.Now });
             notificationManager.SendNotification("DaysFrom", $"Event {name} added!");
             await Refresh();
         }
@@ -159,6 +159,7 @@ namespace DaysFrom.ViewModels
         async Task RemoveEvent(Event eventModel)
         {
             await EventDataService.RemoveEvent(eventModel.Id);
+            await EventNotificationDataService.RemoveEventNotificationByEventId(eventModel.Id);
             await Refresh();
         }
 

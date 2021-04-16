@@ -13,6 +13,7 @@ namespace DaysFrom.Models
         public string Description { get; set; }
         public DateTime EventDate { get; set; }
         public bool Favorite { get; set; }
+        public DateTime EventCreation { get; set; }
         
     }
 }

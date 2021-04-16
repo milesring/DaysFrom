@@ -62,8 +62,17 @@
     <PackageReference Include="Acr.UserDialogs">
       <Version>7.1.0.483</Version>
     </PackageReference>
+    <PackageReference Include="NodaTime">
+      <Version>3.0.5</Version>
+    </PackageReference>
     <PackageReference Include="Refractored.MvvmHelpers">
       <Version>1.6.2</Version>
+    </PackageReference>
+    <PackageReference Include="Shiny.Core">
+      <Version>1.2.0.1755</Version>
+    </PackageReference>
+    <PackageReference Include="Shiny.Notifications">
+      <Version>1.2.0.1755</Version>
     </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.8.0-beta</Version>
@@ -78,6 +87,7 @@
     <Compile Include="AlarmHandler.cs" />
     <Compile Include="AndroidNotificationManager.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="MainApplication.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

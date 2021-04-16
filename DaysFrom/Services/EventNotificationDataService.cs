@@ -9,8 +9,9 @@ using Xamarin.Essentials;
 
 namespace DaysFrom.Services
 {
-    public static class EventDataService
+    public static class EventNotificationDataService
     {
+
         static SQLiteAsyncConnection db;
 
         static async Task Init()
@@ -20,40 +21,33 @@ namespace DaysFrom.Services
 
             var databasePath = Path.Combine(FileSystem.AppDataDirectory, "EventData.db");
             db = new SQLiteAsyncConnection(databasePath);
-            await db.CreateTableAsync<Event>();
+            await db.CreateTableAsync<EventNotification>();
         }
 
-        public static async Task AddEvent(Event eventModel)
+        public static async Task AddEventNotification(EventNotification eventNotification)
         {
             await Init();
-            if (eventModel.Id != 0)
+            if (eventNotification.Id != 0)
             {
-                await db.UpdateAsync(eventModel);
+                await db.UpdateAsync(eventNotification);
             }
             else
             {
-                await db.InsertAsync(eventModel);
+                await db.InsertAsync(eventNotification);
             }
         }
 
-        public static async Task RemoveEvent(int id)
+        public static async Task RemoveEventNotificationByEventId(int id)
         {
             await Init();
-            await db.DeleteAsync<Event>(id);
+            await db.Table<EventNotification>().DeleteAsync(x => x.EventId == id);
         }
 
-        public static async Task<IEnumerable<Event>> GetEvents()
+        public static async Task<IEnumerable<EventNotification>> GetEventNotificationsById(int id)
         {
             await Init();
-            var events = await db.Table<Event>().ToListAsync();
+            var events = await db.Table<EventNotification>().Where(x=>x.EventId == id).ToListAsync();
             return events;
-        }
-
-        public static async Task<Event> GetEvent(int id)
-        {
-            await Init();
-            var eventModel = await db.Table<Event>().Where(x => x.Id == id).FirstAsync();
-            return eventModel;
         }
     }
 }

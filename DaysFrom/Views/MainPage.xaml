@@ -18,7 +18,6 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:DateTimeToDaysSinceConverter x:Key="DaysSinceConverter" />
-            <converters:BoolToFavoriteButtonTextConverter x:Key="BoolToFavoriteConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>

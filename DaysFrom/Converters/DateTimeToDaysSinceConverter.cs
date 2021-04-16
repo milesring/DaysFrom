@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -10,30 +11,42 @@ namespace DaysFrom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var date = (DateTime)value;
-            var timeSince = DateTime.Now - date;
+            //TODO: Convert to NodaTime values
+            var date = LocalDateTime.FromDateTime((DateTime)value);
+            var timeSince = Period.Between(date, LocalDateTime.FromDateTime(DateTime.Now));
             var days = timeSince.Days;
             var hours = timeSince.Hours;
             var min = timeSince.Minutes;
 
             string tense = "have passed.";
-            if(timeSince.TotalSeconds < 0)
+            if(timeSince.Ticks < 0)
             {
-                days *= -1;
-                hours *= -1;
-                min *= -1;
                 tense = "until.";
             }
 
             string yearsString = "";
-            if (days > 365)
+            if (timeSince.Years != 0)
             {
-                var years = days / 365;
-                days = days % 365;
-                yearsString = $"{years} years, ";
+                yearsString = $"{Math.Abs(timeSince.Years)} years, ";
             }
 
-            return $"{yearsString}{days} days, {hours} hours, and {min} minutes {tense}"; ;
+            string monthsString = "";
+            if(timeSince.Months != 0)
+            {
+                monthsString = $"{Math.Abs(timeSince.Months)} months, ";
+            }
+            string daysString = "";
+            if(days != 0)
+            {
+                daysString = $"{Math.Abs(days)} days, ";
+            }
+            string hoursString = "";
+            if(hours != 0)
+            {
+                hoursString = $"{Math.Abs(hours)} hours, ";
+            }
+
+            return $"{yearsString}{monthsString}{daysString}{hoursString}{Math.Abs(min)} minutes {tense}"; ;
 
         }
 

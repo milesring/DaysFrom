@@ -7,6 +7,7 @@ using Acr.UserDialogs;
 using Android.Content;
 using Xamarin.Forms;
 using DaysFrom.Services;
+using Shiny;
 
 namespace DaysFrom.Droid
 {
@@ -20,18 +21,20 @@ namespace DaysFrom.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             UserDialogs.Init(this);
+            this.ShinyOnCreate();
             LoadApplication(new App());
             CreateNotificationFromIntent(Intent);
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
+            this.ShinyRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
         protected override void OnNewIntent(Intent intent)
         {
+            this.ShinyOnNewIntent(intent);
             CreateNotificationFromIntent(intent);
         }
         void CreateNotificationFromIntent(Intent intent)
