@@ -16,9 +16,13 @@ namespace DaysFrom
         {
             InitializeComponent();
             DependencyService.Register<INotificationManager>();
-            //DependencyService.Register<MockDataStore>();
-            Current.UserAppTheme = Current.RequestedTheme;
+            //Current.UserAppTheme = OSAppTheme.Dark;
+            Application.Current.RequestedThemeChanged += (s, a) =>
+            {
+                Application.Current.UserAppTheme = OSAppTheme.Unspecified;
+            };
             MainPage = new AppShell();
+
         }
 
         protected override async void OnStart()

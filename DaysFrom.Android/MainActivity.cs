@@ -22,6 +22,7 @@ namespace DaysFrom.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             UserDialogs.Init(this);
             this.ShinyOnCreate();
+            Window.SetStatusBarColor(Android.Graphics.Color.Argb(0, 255, 255, 255));
             LoadApplication(new App());
             CreateNotificationFromIntent(Intent);
         }
