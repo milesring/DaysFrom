@@ -75,11 +75,16 @@ namespace DaysFrom.ViewModels
             var futureList = new List<Event>();
             var pastList = new List<Event>();
             var favoriteList = new List<Event>();
+            var currentList = new List<Event>();
             foreach (var eventItem in events)
             {
                 if (eventItem.Favorite)
                 {
                     favoriteList.Add(eventItem);
+                }
+                else if(eventItem.EventDate <= DateTime.Now && eventItem.EventEndDate >= DateTime.Now)
+                {
+                    currentList.Add(eventItem);
                 }
                 else if(eventItem.EventDate <= DateTime.Now)
                 {
@@ -90,8 +95,9 @@ namespace DaysFrom.ViewModels
                     futureList.Add(eventItem);
                 }
             }
-            var groups = new EventGroup[] { 
-                new EventGroup("Favorite Events", favoriteList), 
+            var groups = new EventGroup[] {
+                new EventGroup("Favorite Events", favoriteList),
+                new EventGroup("Current Events", currentList),
                 new EventGroup("Future Events", futureList), 
                 new EventGroup("Past Events", pastList) 
             };
@@ -113,13 +119,14 @@ namespace DaysFrom.ViewModels
         async Task AddEvent()
         {
             //TODO: Remove acrPopups and use XTC implementation
-            string name = await Application.Current.MainPage.DisplayPromptAsync("Event Name", "Name of event");
-            if (string.IsNullOrEmpty(name))
+            var newEvent = new Event();
+            newEvent.Name = await Application.Current.MainPage.DisplayPromptAsync("Event Name", "Name of event");
+            if (string.IsNullOrEmpty(newEvent.Name))
             {
                 return;
             }
-            string description = await Application.Current.MainPage.DisplayPromptAsync("Event description", "Description of event");
-            if (string.IsNullOrEmpty(description))
+            newEvent.Description = await Application.Current.MainPage.DisplayPromptAsync("Event description", "Description of event");
+            if (string.IsNullOrEmpty(newEvent.Description))
             {
                 return;
             }
@@ -134,7 +141,7 @@ namespace DaysFrom.ViewModels
             {
                 return;
             }
-            var selectedDate = dateResult.SelectedDate;
+            newEvent.EventDate = dateResult.SelectedDate;
 
             bool timeRequest = await Application.Current.MainPage.DisplayAlert("Specify Time", "Would you like to specify a time?", "Yes", "No");
             if (timeRequest)
@@ -147,12 +154,39 @@ namespace DaysFrom.ViewModels
                 {
                     return;
                 }
-                selectedDate = selectedDate.Add(timeResult.SelectedTime);
+                newEvent.EventDate = newEvent.EventDate.Add(timeResult.SelectedTime);
             }
-            
 
-            await EventDataService.AddEvent(new Event() { Name = name, Description = description, EventDate = selectedDate, EventCreation = DateTime.Now });
-            notificationManager.SendNotification("DaysFrom", $"Event {name} added!");
+            var endDateRequest = await Application.Current.MainPage.DisplayAlert("End Date", "Would you like to speficy an end date for this event?", "Yes", "No");
+            if (endDateRequest)
+            {
+                var endDateResult = await UserDialogs.Instance.DatePromptAsync(new DatePromptConfig
+                {
+                    IsCancellable = true,
+                    MinimumDate = DateTime.Now.AddYears(-100),
+                    MaximumDate = DateTime.Now.AddYears(100)
+                });
+                if (!endDateResult.Ok)
+                {
+                    return;
+                }
+                newEvent.EventEndDate = endDateResult.SelectedDate;
+                timeRequest = await Application.Current.MainPage.DisplayAlert("Specify Time", "Would you like to specify a time for the end date?", "Yes", "No");
+                if (timeRequest)
+                {
+                    var timeResult = await UserDialogs.Instance.TimePromptAsync(new TimePromptConfig
+                    {
+                        IsCancellable = true
+                    });
+                    if (!timeResult.Ok)
+                    {
+                        return;
+                    }
+                    newEvent.EventEndDate = newEvent.EventEndDate.Add(timeResult.SelectedTime);
+                }
+            }
+            await EventDataService.AddEvent(newEvent);
+            //notificationManager.SendNotification("DaysFrom", $"Event {name} added!");
             await Refresh();
         }
 

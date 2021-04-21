@@ -18,6 +18,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:DateTimeToDaysSinceConverter x:Key="DaysSinceConverter" />
+            <converters:DateTimeToVisibilityConverter x:Key="DateVisibilityConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -85,23 +86,28 @@
                                             <Label Style="{StaticResource ItemNameLabelStyle}"
                                                    Text="{Binding Name}"
                                                    Grid.Column="0"
-                                                   Grid.Row="0"/>
+                                                   Grid.Row="0" />
                                             <Label Style="{StaticResource ItemDescriptionLabelStyle}"
                                                    Text="{Binding Description}"
                                                    Grid.Column="0"
-                                                   Grid.Row="1"/>
-                                            <Label Style="{StaticResource EventDateLabelStyle}"
-                                                   Text="{Binding EventDate, StringFormat='{0:MM/dd/yy}'}"
-                                                   Grid.Column="1"
-                                                   Grid.Row="0"
-                                                   HorizontalOptions="End"/>
+                                                   Grid.Row="1" />
+                                            <StackLayout Grid.Column="1"
+                                                         Grid.Row="0"
+                                                         HorizontalOptions="End"
+                                                         Orientation="Horizontal">
+                                                <Label Style="{StaticResource EventDateLabelStyle}"
+                                                       Text="{Binding EventDate, StringFormat='{0:M/dd/yy}'}"/>
+                                                <Label Style="{StaticResource EventDateLabelStyle}"
+                                                       Text="{Binding EventEndDate, StringFormat='- {0:M/dd/yy}'}"
+                                                       IsVisible="{Binding EventEndDate, Converter={StaticResource DateVisibilityConverter}}" />
+                                            </StackLayout>
                                             <Label Style="{StaticResource EventDateLabelStyle}"
                                                    Text="{Binding EventDate, Converter={StaticResource DaysSinceConverter}}"
                                                    Grid.Column="0"
                                                    Grid.Row="2"
                                                    Grid.ColumnSpan="2"
                                                    HorizontalOptions="EndAndExpand"
-                                                   HorizontalTextAlignment="End"/>
+                                                   HorizontalTextAlignment="End" />
                                         </Grid>
                                     </Frame>
                                 </StackLayout>
@@ -112,7 +118,7 @@
             </RefreshView>
             <Button Style="{StaticResource AddEventButtonStyle}"
                     Command="{Binding AddEventCommand}"
-                    Margin="0,-60,10,10"/>
+                    Margin="0,-60,10,10" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
