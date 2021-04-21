@@ -11,7 +11,6 @@ namespace DaysFrom.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            //TODO: Convert to NodaTime values
             var date = LocalDateTime.FromDateTime((DateTime)value);
             var timeSince = Period.Between(date, LocalDateTime.FromDateTime(DateTime.Now));
             var days = timeSince.Days;
