@@ -13,7 +13,7 @@ namespace DaysFrom.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var eventModel = (Event)value;
-            if (eventModel == null || eventModel.EventEndDate == DateTime.MinValue)
+            if (eventModel == null || eventModel.EventEndDate == DateTime.MinValue || eventModel.EventDate > DateTime.Now)
             {
                 return null;
             }
