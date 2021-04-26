@@ -14,7 +14,7 @@ namespace DaysFrom.ViewModels
     public class MainPageViewModel : BaseViewModel
     {
         INotificationManager notificationManager;
-        
+
         public MainPageViewModel()
         {
 
@@ -82,11 +82,11 @@ namespace DaysFrom.ViewModels
                 {
                     favoriteList.Add(eventItem);
                 }
-                else if(eventItem.EventDate <= DateTime.Now && eventItem.EventEndDate >= DateTime.Now)
+                else if (eventItem.EventDate <= DateTime.Now && eventItem.EventEndDate >= DateTime.Now)
                 {
                     currentList.Add(eventItem);
                 }
-                else if(eventItem.EventDate <= DateTime.Now)
+                else if (eventItem.EventDate <= DateTime.Now)
                 {
                     pastList.Add(eventItem);
                 }
@@ -98,15 +98,15 @@ namespace DaysFrom.ViewModels
             var groups = new EventGroup[] {
                 new EventGroup("Favorite Events", favoriteList),
                 new EventGroup("Current Events", currentList),
-                new EventGroup("Future Events", futureList), 
-                new EventGroup("Past Events", pastList) 
+                new EventGroup("Future Events", futureList),
+                new EventGroup("Past Events", pastList)
             };
 
 
             //this avoids empty headers
             for (int i = 0; i < groups.Length; i++)
             {
-                if(groups[i].Count > 0)
+                if (groups[i].Count > 0)
                 {
                     EventGroups.Add(groups[i]);
                 }
@@ -201,13 +201,13 @@ namespace DaysFrom.ViewModels
         {
 
             //TODO: Edit event end date 
-            string name = await Application.Current.MainPage.DisplayPromptAsync("Event Name", "Name of event", placeholder:eventModel.Name, initialValue:eventModel.Name);
-            if (string.IsNullOrEmpty(name))
+            eventModel.Name = await Application.Current.MainPage.DisplayPromptAsync("Event Name", "Name of event", placeholder: eventModel.Name, initialValue: eventModel.Name);
+            if (string.IsNullOrEmpty(eventModel.Name))
             {
                 return;
             }
-            string description = await Application.Current.MainPage.DisplayPromptAsync("Event description", "Description of event", placeholder: eventModel.Description, initialValue:eventModel.Description);
-            if (string.IsNullOrEmpty(description))
+            eventModel.Description = await Application.Current.MainPage.DisplayPromptAsync("Event description", "Description of event", placeholder: eventModel.Description, initialValue: eventModel.Description);
+            if (string.IsNullOrEmpty(eventModel.Description))
             {
                 return;
             }
@@ -223,38 +223,70 @@ namespace DaysFrom.ViewModels
             {
                 return;
             }
-            var selectedDate = result.SelectedDate;
 
-            bool timeRequest = await Application.Current.MainPage.DisplayAlert("Specify Time", "Would you like to specify a time?", "Yes", "No");
+            eventModel.EventDate = result.SelectedDate.Add(eventModel.EventDate.TimeOfDay);
+
+            var timeRequestTitle = "Specify Time";
+            var timeRequestString = "Would you like to specify a time?";
+            if (eventModel.EventDate.TimeOfDay != DateTime.MinValue.TimeOfDay)
+            {
+                timeRequestTitle = "Edit Time";
+                timeRequestString = "Would you like to edit the event time?";
+            }
+            bool timeRequest = await Application.Current.MainPage.DisplayAlert(timeRequestTitle, timeRequestString, "Yes", "No");
             if (timeRequest)
             {
-                var timeResult = await UserDialogs.Instance.TimePromptAsync(new TimePromptConfig
+                var eventTimeResult = await UserDialogs.Instance.TimePromptAsync(new TimePromptConfig
                 {
                     IsCancellable = true,
                     SelectedTime = eventModel.EventDate.TimeOfDay
                 });
-                if (!timeResult.Ok)
+                if (!eventTimeResult.Ok)
                 {
                     return;
                 }
 
-                selectedDate = selectedDate.Add(timeResult.SelectedTime);
+                eventModel.EventDate = eventModel.EventDate.Add(eventTimeResult.SelectedTime);
+            }
+            bool editEndDateResult = await Application.Current.MainPage.DisplayAlert("Edit End Date", "Would you like to add or edit the event's end date or time?", "Yes", "No");
+            if (editEndDateResult)
+            {
+                result = await UserDialogs.Instance.DatePromptAsync(new DatePromptConfig
+                {
+                    IsCancellable = true,
+                    MinimumDate = eventModel.EventDate,
+                    MaximumDate = DateTime.Now.AddYears(100),
+                    SelectedDate = eventModel.EventEndDate
+                });
+                if (!result.Ok)
+                {
+                    return;
+                }
+                eventModel.EventEndDate = result.SelectedDate.Add(eventModel.EventEndDate.TimeOfDay);
+
+                timeRequestTitle = "Specify Time";
+                timeRequestString = "Would you like to specify a time for the event end date?";
+                if (eventModel.EventDate.TimeOfDay != DateTime.MinValue.TimeOfDay)
+                {
+                    timeRequestTitle = "Edit Time";
+                    timeRequestString = "Would you like to edit the event end time?";
+                }
+                bool editEndDateTimeResult = await Application.Current.MainPage.DisplayAlert(timeRequestTitle, timeRequestString, "Yes", "No");
+                if (editEndDateTimeResult)
+                {
+                    var endEventTimeResult = await UserDialogs.Instance.TimePromptAsync(new TimePromptConfig
+                    {
+                        IsCancellable = true,
+                        SelectedTime = eventModel.EventEndDate.TimeOfDay
+                    });
+                    if (!endEventTimeResult.Ok)
+                    {
+                        return;
+                    }
+                    eventModel.EventEndDate = eventModel.EventEndDate.Add(endEventTimeResult.SelectedTime);
+                }
             }
 
-            if (!name.Equals(eventModel.Name))
-            {
-                eventModel.Name = name;
-            }
-
-            if (!description.Equals(eventModel.Description))
-            {
-                eventModel.Description = description;
-            }
-
-            if(result.SelectedDate != eventModel.EventDate)
-            {
-                eventModel.EventDate = selectedDate;
-            }
             await EventDataService.AddEvent(eventModel);
             await Refresh();
         }

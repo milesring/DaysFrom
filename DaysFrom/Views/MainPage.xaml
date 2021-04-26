@@ -82,7 +82,7 @@
                                 <StackLayout Padding="10">
                                     <Frame Style="{StaticResource ItemFrameStyle}">
                                         <Grid ColumnDefinitions="*,*"
-                                              RowDefinitions="*,*,*"
+                                              RowDefinitions="*,*,*,*"
                                               x:DataType="model:Event">
                                             <!-- TODO: Max length to avoid linebreaking -->
                                             <Label Style="{StaticResource ItemNameLabelStyle}"
@@ -103,14 +103,7 @@
                                                        Text="{Binding EventEndDate, StringFormat='- {0:M/dd/yy}'}"
                                                        IsVisible="{Binding EventEndDate, Converter={StaticResource DateVisibilityConverter}}" />
                                             </StackLayout>
-                                            <Label Style="{StaticResource EventDateLabelStyle}"
-                                                   Text="{Binding EventDate, Converter={StaticResource DaysSinceConverter}}"
-                                                   Grid.Column="0"
-                                                   Grid.Row="2"
-                                                   Grid.ColumnSpan="2"
-                                                   HorizontalOptions="EndAndExpand"
-                                                   HorizontalTextAlignment="End" 
-                                                   IsVisible="{Binding EventEndDate, Converter={StaticResource InvertedDateVisibilityConverter}}"/>
+
                                             <Label Style="{StaticResource EventDateLabelStyle}"
                                                    Text="{Binding ., Converter={StaticResource TimeSpanToTextConveter}}"
                                                    Grid.Column="0"
@@ -119,6 +112,14 @@
                                                    HorizontalOptions="EndAndExpand"
                                                    HorizontalTextAlignment="End" 
                                                    IsVisible="{Binding EventEndDate, Converter={StaticResource DaysSinceConverter}}"/>
+                                            <Label Style="{StaticResource EventDateLabelStyle}"
+                                                   Text="{Binding EventDate, Converter={StaticResource DaysSinceConverter}}"
+                                                   Grid.Column="0"
+                                                   Grid.Row="3"
+                                                   Grid.ColumnSpan="2"
+                                                   HorizontalOptions="EndAndExpand"
+                                                   HorizontalTextAlignment="End" />
+                                           <!-- IsVisible="{Binding EventEndDate, Converter={StaticResource InvertedDateVisibilityConverter}}" /> -->
                                         </Grid>
                                     </Frame>
                                 </StackLayout>

@@ -17,10 +17,12 @@ namespace DaysFrom.Converters
             {
                 return null;
             }
+            var tenseString = string.Empty;
             LocalDateTime endDate;
             if(DateTime.Now < eventModel.EventEndDate)
             {
                 endDate = LocalDateTime.FromDateTime(DateTime.Now);
+                tenseString = " so far";
             }
             else
             {
@@ -47,7 +49,7 @@ namespace DaysFrom.Converters
                 timeSpannedString = timeSpannedString.Insert(0, $"{timeSpanned.Years} years, ");
             }
 
-            return $"Event has lasted {timeSpannedString} so far";
+            return $"Lasted {timeSpannedString}{tenseString}.";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
