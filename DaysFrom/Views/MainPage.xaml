@@ -19,6 +19,8 @@
         <ResourceDictionary>
             <converters:DateTimeToDaysSinceConverter x:Key="DaysSinceConverter" />
             <converters:DateTimeToVisibilityConverter x:Key="DateVisibilityConverter" />
+            <converters:DateSpanToTextConverter x:Key="TimeSpanToTextConveter" />
+            <converters:InvertedDateTimeToVisibilityConverter x:Key="InvertedDateVisibilityConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -107,7 +109,16 @@
                                                    Grid.Row="2"
                                                    Grid.ColumnSpan="2"
                                                    HorizontalOptions="EndAndExpand"
-                                                   HorizontalTextAlignment="End" />
+                                                   HorizontalTextAlignment="End" 
+                                                   IsVisible="{Binding EventEndDate, Converter={StaticResource InvertedDateVisibilityConverter}}"/>
+                                            <Label Style="{StaticResource EventDateLabelStyle}"
+                                                   Text="{Binding ., Converter={StaticResource TimeSpanToTextConveter}}"
+                                                   Grid.Column="0"
+                                                   Grid.Row="2"
+                                                   Grid.ColumnSpan="2"
+                                                   HorizontalOptions="EndAndExpand"
+                                                   HorizontalTextAlignment="End" 
+                                                   IsVisible="{Binding EventEndDate, Converter={StaticResource DaysSinceConverter}}"/>
                                         </Grid>
                                     </Frame>
                                 </StackLayout>

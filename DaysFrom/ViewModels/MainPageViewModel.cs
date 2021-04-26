@@ -199,6 +199,8 @@ namespace DaysFrom.ViewModels
 
         async Task EditEvent(Event eventModel)
         {
+
+            //TODO: Edit event end date 
             string name = await Application.Current.MainPage.DisplayPromptAsync("Event Name", "Name of event", placeholder:eventModel.Name, initialValue:eventModel.Name);
             if (string.IsNullOrEmpty(name))
             {

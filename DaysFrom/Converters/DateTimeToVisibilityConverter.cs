@@ -8,7 +8,7 @@ namespace DaysFrom.Converters
 {
     public class DateTimeToVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var date = (DateTime)value;
             if(date == DateTime.MinValue)
