@@ -11,7 +11,8 @@
              x:Class="DaysFrom.Views.MainPage"
              Shell.NavBarIsVisible="False"
              Appearing="ContentPage_Appearing"
-             Style="{StaticResource ContentPageStyle}">
+             Style="{StaticResource ContentPageStyle}"
+             x:DataType="vms:MainPageViewModel">
     <ContentPage.BindingContext>
         <vms:MainPageViewModel />
     </ContentPage.BindingContext>
@@ -32,7 +33,7 @@
                                 Margin="0,0,0,0"
                                 SelectedItem="{Binding SelectedEvent}">
                     <CollectionView.GroupHeaderTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="model:EventGroup">
                             <StackLayout Padding="10">
                                 <Label Text="{Binding Name}"
                                        FontSize="Medium" />
@@ -40,7 +41,7 @@
                         </DataTemplate>
                     </CollectionView.GroupHeaderTemplate>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="model:Event">
                             <SwipeView>
                                 <SwipeView.RightItems>
                                     <SwipeItems>
